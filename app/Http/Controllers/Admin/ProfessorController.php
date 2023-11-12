@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\Day;
+use App\Models\Course;
+use App\Models\Timeslot;
 use App\Models\Professor;
+use App\Models\UnavailableTimeslot;
 
 class ProfessorController extends Controller
 {
@@ -34,7 +38,11 @@ class ProfessorController extends Controller
      */
     public function create()
     {
-        return view('admin.professors.create');
+        $courses = Course::all();
+        $professors = Professor::all();
+        $days = Day::all();
+        $timeslots = Timeslot::all();
+        return view('admin.professors.create', compact('professors', 'courses', 'days', 'timeslots'));
     }
 
     /**
@@ -47,7 +55,7 @@ class ProfessorController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|max:255',
-            'email' => 'required|max:255',
+            // 'email' => 'required|max:255',
         ]);
 
         $input = $request->all();
@@ -55,6 +63,22 @@ class ProfessorController extends Controller
         $professor->name = $input['name'];
         $professor->email = $input['email'];
         $professor->save();
+        if (isset($input['course_ids'])) {
+            $professor->courses()->sync($input['course_ids']);
+        }
+
+        if (isset($input['unavailable_periods'])) {
+            foreach ($input['unavailable_periods'] as $period) {
+                $parts = explode("," , $period);
+                $dayId = $parts[0];
+                $periodId = $parts[1];
+
+                $professor->unavailable_timeslots()->create([
+                    'day_id' => $dayId,
+                    'timeslot_id' => $periodId
+                ]);
+            }
+        }
 
         Session::flash('success_message', 'Great! Professor has been saved successfully!');
         return redirect()->back();
@@ -80,8 +104,29 @@ class ProfessorController extends Controller
     public function edit($id)
     {
         $professor = $this->obj->find($id);
+        $courses = Course::all();
+        $professors = Professor::all();
+        $days = Day::all();
+        $timeslots = Timeslot::all();
+        $professor = Professor::find($id);
+        $courseIds = [];
+        $periods = [];
 
-        return view('admin.professors.edit', ['title' => 'Update Professor Details', 'professor' => $professor]);
+        if (!$professor) {
+            return null;
+        }
+
+        foreach ($professor->courses as $course) {
+            $courseIds[] = $course->id;
+        }
+
+        foreach ($professor->unavailable_timeslots as $period) {
+            $periods[] = implode(",", [$period->day_id, $period->timeslot_id]);
+        }
+
+        $professor->course_ids = $courseIds;
+        $professor->periods = $periods;
+        return view('admin.professors.edit', compact('professors', 'courses', 'days', 'timeslots', 'professor'));
     }
 
     /**
@@ -103,6 +148,45 @@ class ProfessorController extends Controller
         $professor->name = $input['name'];
         $professor->email = $input['email'];
         $professor->save();
+        if (!isset($data['course_ids'])) {
+            $data['course_ids'] = [];
+        }
+
+        $professor->courses()->sync($input['course_ids']);
+
+        if (isset($input['unavailable_periods'])) {
+            foreach ($input['unavailable_periods'] as $period) {
+                $parts = explode("," , $period);
+                $dayId = $parts[0];
+                $timeslotId = $parts[1];
+
+                $existing = $professor->unavailable_timeslots()
+                    ->where('day_id', $dayId)
+                    ->where('timeslot_id', $timeslotId)
+                    ->first();
+
+                if (!$existing) {
+                    $professor->unavailable_timeslots()->create([
+                        'day_id' => $dayId,
+                        'timeslot_id' => $timeslotId
+                    ]);
+                }
+            }
+
+            foreach ($professor->unavailable_timeslots as $period) {
+                if ($period->day && $period->timeslot) {
+                    $periodString = implode("," , [$period->day->id, $period->timeslot->id]);
+                }
+
+                if (!isset($input['unavailable_periods']) || !in_array($periodString, $input['unavailable_periods'])) {
+                    $period->delete();
+                }
+            }
+        } else {
+            foreach ($professor->unavailable_timeslots as $period) {
+                $period->delete();
+            }
+        }
 
         Session::flash('success_message', 'Great! professor successfully updated!');
         return redirect()->back();

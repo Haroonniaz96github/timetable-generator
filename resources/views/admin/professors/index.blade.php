@@ -55,8 +55,10 @@
                                                         <input type="checkbox">
                                                         <label for="checkbox3"></label>
                                                     </div>
-                                                <th>NAME</th>
-                                                <th>Email</th>
+                                                    <th style="width: 20%">Name</th>
+                                                    <th style="width: 20%">Email</th>
+                                                    <th style="width: 30%">Courses Taught</th>
+                                                    <th style="width: 20%">Unavailable Periods</th>
                                                 <th>Created at</th>
                                                 <th>Action</th>
                                             </tr>
@@ -73,6 +75,28 @@
                                                     </td>
                                                     <td>{{ $professor->name }}</td>
                                                     <td>{{ $professor->email }}</td>
+                                                    <td>
+                                                        @if (count($professor->courses))
+                                                            <ul>
+                                                                @foreach ($professor->courses as $course)
+                                                                <li>{{ $course->course_code . " " . $course->name }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <p>No courses added yet</p>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (count($professor->unavailable_timeslots))
+                                                            <ul>
+                                                                @foreach ($professor->unavailable_timeslots as $period)
+                                                                    <li>{{ $period->day->name . " " . $period->timeslot->time }}</li>
+                                                                @endforeach
+                                                            </ul>
+                                                        @else
+                                                            <p>No unavailable periods</p>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $professor->created_at }}</td>
                                                     <td>
                                                         <a class="btn btn-info btn-sm"

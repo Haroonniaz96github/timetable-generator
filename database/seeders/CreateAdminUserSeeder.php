@@ -6,6 +6,7 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Database\Seeder;
+use DB;
 
 class CreateAdminUserSeeder extends Seeder
 {

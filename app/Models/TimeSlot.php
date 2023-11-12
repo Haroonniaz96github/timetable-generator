@@ -9,6 +9,8 @@ class TimeSlot extends Model
 {
     use HasFactory;
 
+    public $table = 'timeslots';
+    
     public function containsPeriod($timePeriod)
     {
         $edgesA = self::getParts($this->time);

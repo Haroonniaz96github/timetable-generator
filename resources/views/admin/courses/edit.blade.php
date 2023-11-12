@@ -46,13 +46,29 @@
                             </div>
                             <div class="form-group">
                                 <label for="course">Code</label>
-                                <input type="number" name="course" value="{{$course->code}}"
+                                <input type="text" name="code" value="{{$course->course_code}}"
                                     class="form-control  {{ $errors->has('code') ? 'is-invalid' : '' }}" id="course"
                                     placeholder="Enter code" min="0">
                                 @error('code')
                                     <span id="name-error" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="code">Select Professor</label>
+                                <select class="form-control select2" name="professor_ids[]" multiple="multiple" data-placeholder="Select options" style="width: 100%;">
+                                    @foreach ($professors as $professor)
+                                        <option value="{{ $professor->id }}" 
+                                            @if(in_array($professor->id, $course->professor_ids   ?? []))
+                                                selected
+                                            @endif
+                                        >{{ $professor->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('professor_ids')
+                                    <span id="professor_ids-error" class="error invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            
                         </div>
                         <!-- /.card-body -->
 

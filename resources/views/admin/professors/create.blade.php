@@ -53,27 +53,31 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="code">Courses</label>
-                                <select class="form-control">
-                                    <option selected>Select Courses</option>
-                                    <option>CSM 302 Computer Graphics</option>
-                                    <option>CSM 303 Data Structures and Algorithms I</option>
-                                    <option>CSM 305 System Analysis</option>
+                                <label for="courses-select">Select Courses</label>
+                                <select id="courses-select" name="course_ids[]" class="form-control select2" multiple>
+                                    <option value="">Select courses</option>
+                                    @foreach ($courses as $course)
+                                     <option value="{{ $course->id }}">{{ $course->course_code }} {{ $course->name }}</option>
+                                    @endforeach
                                 </select>
-                                @error('code')
-                                    <span id="code-error" class="error invalid-feedback">{{ $message }}</span>
+                                @error('course_ids')
+                                    <span id="course_ids-error" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="code">Unavailable Periods</label>
-                                <select class="form-control">
-                                    <option selected>Select Professor</option>
-                                    <option>Monday 10:30 - 12:30</option>
-                                    <option>Monday 12:30 - 01:30</option>
-                                    <option>Monday 01:30 - 02:15</option>
+                                <label for="unavailable_periods">Select unavailable periods for this lecturer</label>
+                                <select class="form-control select2" name="unavailable_periods[]">
+                                    {{-- <option value="">Select unavailable periods for this lecturer</option> --}}
+                                    @foreach ($days as $day)
+                                        @foreach ($timeslots as $timeslot)
+                                            <option value="{{ $day->id  }},{{ $timeslot->id }}">
+                                                {{ $day->name . " " . $timeslot->time }}
+                                            </option>
+                                        @endforeach
+                                    @endforeach
                                 </select>
-                                @error('code')
-                                    <span id="code-error" class="error invalid-feedback">{{ $message }}</span>
+                                @error('unavailable_periods')
+                                    <span id="unavailable_periods-error" class="error invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>

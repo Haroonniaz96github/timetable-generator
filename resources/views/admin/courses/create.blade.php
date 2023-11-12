@@ -54,11 +54,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="code">Select Professor</label>
-                                <select class="form-control">
-                                    <option selected>Select Professor</option>
-                                    <option>Dr Theophlus Asare</option>
-                                    <option>Dr Richman Clifford</option>
-                                    <option>Dr Ahmed Dawuda</option>
+                                <select class="form-control select2" name="professor_ids[]" multiple="multiple" data-placeholder="Select options" style="width: 100%;">
+                                    @foreach ($professors as $professor)
+                                    <option value="{{ $professor->id }}">{{ $professor->name }}</option>
+                                   @endforeach
                                 </select>
                                 @error('code')
                                     <span id="code-error" class="error invalid-feedback">{{ $message }}</span>
