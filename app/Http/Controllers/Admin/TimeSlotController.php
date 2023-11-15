@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\TimeSlot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Events\TimeslotsUpdated;
+use App\Services\TimeslotsService;
+use App\Models\Day;
 
 class TimeSlotController extends Controller
 {
@@ -46,39 +49,51 @@ class TimeSlotController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        $rules = [
             'from' => 'required|before:to',
             'to' => 'required|after:from'
-        ]);
+        ];
 
-        $exists = Timeslot::where('time', createTimePeriod($request->from, $request->to))->first();
+        $messages = [
+            'from.before' => 'From time must be before To time',
+            'to.after' => 'To time must be after From time'
+        ];
+
+        $this->validate($request, $rules, $messages);
+
+        $exists = Timeslot::where('time', Timeslot::createTimePeriod($request->from, $request->to))->first();
 
         if ($exists) {
-            Session::flash('error_message', 'This timeslot already exists!');
+            Session::flash('error_message', 'Error! This timeslot already exists');
+            return redirect()->back();
         }
 
         $data = $request->all();
-
-        $data['time'] = createTimePeriod($data['from'], $data['to']);
+        $data['time'] = Timeslot::createTimePeriod($data['from'], $data['to']);
 
         $timeslots = Timeslot::all();
 
         foreach ($timeslots as $timeslot) {
-            if (TimeSlot::containsPeriod($data['time'])) {
-                $errors = [ $data['time'] . ' falls within another timeslot (' . $timeslot->time
+            if ($timeslot->containsPeriod($data['time'])) {
+                $errors = [$data['time'] . ' falls within another timeslot (' . $timeslot->time
                     . ').Please adjust timeslots'];
-                return Session::flash('error_message', $errors);
+                Session::flash('error_message', 'Error! This timeslot already exists');
+                return redirect()->back();
             }
         }
 
         $input = $request->all();
         $time_slot = new TimeSlot();
         $time_slot->time =  $data['time'];
-        $time_slot->rank = 1;
-        $time_slot->save();
 
-        Session::flash('success_message', 'Great! TimeSlot has been saved successfully!');
-        return redirect()->back();
+        if ($time_slot->save()) {
+            event(new TimeslotsUpdated());
+            Session::flash('success_message', 'Great! TimeSlot has been saved successfully!');
+            return redirect()->back();
+        } else {
+            Session::flash('error_message', 'Error! Something went wrong');
+            return redirect()->back();
+        }
     }
 
     /**

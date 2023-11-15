@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ProfessorController;
 use App\Http\Controllers\Admin\TimeSlotController;
+use App\Http\Controllers\Admin\ClassController;
 
 
 /*
@@ -88,6 +89,13 @@ Route::group([
     Route::get('time-slots/delete/{id}',  [TimeSlotController::class, 'destroy'])->name('time-slot-delete');
     Route::post('delete-selected-time-slots',  [TimeSlotController::class, 'DeleteSelectedTimeSlots'])->name('delete-selected-time-slots');
 
+    //Classes Controller
+    Route::resource('classes', ClassController::class);
+    Route::post('get-classes',  [ClassController::class, 'getTimeSlots'])->name('admin.getClasses');
+    Route::post('get-class', [ClassController::class, 'timeSlotDetail'])->name('admin.getClass');
+    Route::get('class/delete/{id}',  [ClassController::class, 'destroy'])->name('class-delete');
+    Route::post('delete-selected-classes',  [ClassController::class, 'DeleteSelectedClasses'])->name('delete-selected-classes');
+
     //Roles Controller
     Route::resource('roles', RoleController::class);
     Route::post('get-roles',  [RoleController::class, 'getRoles'])->name('admin.getRoles');
@@ -122,8 +130,5 @@ Route::group([
     Route::post('/media-upload/all', [MediaUploadController::class, 'all_upload_media_file'])->name('admin.upload.media.file.all');
     Route::post('/media-upload', [MediaUploadController::class, 'upload_media_file'])->name('admin.upload.media.file');
     Route::post('/media-upload/delete', [MediaUploadController::class, 'delete_upload_media_file'])->name('admin.upload.media.file.delete');
-
-    Route::get('classess/create',  [CourseController::class, 'classes'])->name('classes.create');
-
 
 });
