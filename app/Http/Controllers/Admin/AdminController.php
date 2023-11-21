@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Room;
+use App\Models\Course;
+use App\Models\Professor;
+use App\Models\CollegeClass;
 
 class AdminController extends Controller
 {
@@ -14,7 +18,11 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin.dashboard.index');
+        $roomsCount = Room::count();
+        $coursesCount = Course::count();
+        $professorsCount = Professor::count();
+        $classesCount = CollegeClass::count();
+        return view('admin.dashboard.index', compact('roomsCount', 'coursesCount', 'professorsCount', 'classesCount'));
     }
 
     /**
