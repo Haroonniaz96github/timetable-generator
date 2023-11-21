@@ -36,20 +36,20 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            $userId = Auth::user()->id ?? 1;
+        // $this->reportable(function (Throwable $e) {
+        //     $userId = Auth::user()->id ?? 1;
 
 
-            $data = array(
-                'user_id' => $userId,
-                'code' => $e->getCode(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            );
+        //     $data = array(
+        //         'user_id' => $userId,
+        //         'code' => $e->getCode(),
+        //         'file' => $e->getFile(),
+        //         'line' => $e->getLine(),
+        //         'message' => $e->getMessage(),
+        //         'trace' => $e->getTraceAsString(),
+        //     );
 
-            Log::create($data);
-        });
+        //     Log::create($data);
+        // });
     }
 }

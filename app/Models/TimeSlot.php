@@ -5,10 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TimeSlot extends Model
+class Timeslot extends Model
 {
     use HasFactory;
+    
+    protected $table = 'timeslots';
 
+    protected $guarded = ['id'];
+
+    /**
+     * Determine whether a given period  is within
+     * the period of this timeslot
+     *
+     * @param string $timePeriod The time period
+     * @return Boolean Value of test
+     */
     public function containsPeriod($timePeriod)
     {
         $edgesA = self::getParts($this->time);
@@ -30,4 +41,14 @@ class TimeSlot extends Model
         return array_slice($matches, 1);
     }
 
+    /**
+     * Generate a time period string
+     *
+     * @param string $from From section of period
+     * @param string $to   To section of period
+     */
+    public static function createTimePeriod($from, $to)
+    {
+        return $from . ' - ' . $to;
+    }
 }

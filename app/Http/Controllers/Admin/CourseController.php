@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Professor;
 use Illuminate\Support\Facades\Session;
 
 class CourseController extends Controller
@@ -34,7 +35,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('admin.courses.create');
+        $professors = Professor::all();
+        return view('admin.courses.create', ['professors' => $professors]);
     }
 
     /**
@@ -48,14 +50,20 @@ class CourseController extends Controller
         $this->validate($request, [
             'name' => 'required|max:255',
             'code' => 'required|max:255',
+            'professor_ids' => 'required|max:255',
         ]);
 
         $input = $request->all();
         $course = new Course();
         $course->name = $input['name'];
-        $course->code = $input['code'];
-        $course->save();
+        $course->course_code = $input['code'];
 
+        $course->save();
+        if (!isset($input['professor_ids'])) {
+            $input['professor_ids'] = [];
+        }
+        $course->professors()->sync($input['professor_ids']);
+        // dd($request);
         Session::flash('success_message', 'Great! Course has been saved successfully!');
         return redirect()->back();
     }
@@ -80,8 +88,23 @@ class CourseController extends Controller
     public function edit($id)
     {
         $course = $this->obj->find($id);
+        $professors = Professor::all(); // Assuming you have a Professor model and a professors table
+        $professorIds = [];
 
-        return view('admin.courses.edit', ['title' => 'Update Course Details', 'course' => $course]);
+        if (!$course) {
+            return null;
+        }
+
+        foreach ($course->professors as $professor) {
+            $professorIds[] = $professor->id;
+        }
+
+        $course->professor_ids = $professorIds;
+        return view('admin.courses.edit', [
+            'title' => 'Update Course Details',
+            'course' => $course,
+            'professors' => $professors,
+        ]);
     }
 
     /**
@@ -101,9 +124,14 @@ class CourseController extends Controller
         $input = $request->all();
 
         $course->name = $input['name'];
-        $course->code = $input['code'];
+        $course->course_code = $input['code'];
         $course->save();
+        if (!isset($input['professor_ids'])) {
+            $input['professor_ids'] = [];
+        }
 
+
+        $course->professors()->sync($input['professor_ids']);
         Session::flash('success_message', 'Great! course successfully updated!');
         return redirect()->back();
     }

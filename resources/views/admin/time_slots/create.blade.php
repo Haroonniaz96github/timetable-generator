@@ -36,7 +36,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="from">From</label>
-                                <select id="from-select" name="from" class="form-control select2">
+                                <select id="from-select" name="from" class="form-control">
                                     @for($i = 0; $i <= 23; $i++)
                                        @foreach(['00', '30'] as $subPart)
                                         <option value="{{ (($i < 10) ? "0" : "") . $i . ":" . $subPart }}">
@@ -51,7 +51,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="to">To</label>
-                                <select id="to-select" name="to" class="form-control select2">
+                                <select id="to-select" name="to" class="form-control">
                                     @for($i = 0; $i <= 23; $i++)
                                         @foreach(['00', '30'] as $subPart)
                                         <option value="{{ (($i < 10) ? "0" : "") . $i . ":" . $subPart }}">

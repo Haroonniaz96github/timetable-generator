@@ -24,6 +24,13 @@
 
 <!-- AdminLTE App -->
 <script src="{{ asset('backend/dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/select2/js/select2.full.min.js') }}"></script>
+<script>
+ $(document).ready(function () {
+            $('.select2').select2({
+            });
+        });
+</script>
 <!-- Page specific script -->
 {{-- <script>
     $(function() {

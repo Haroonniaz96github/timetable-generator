@@ -56,7 +56,8 @@
                                                         <label for="checkbox3"></label>
                                                     </div>
                                                 <th>NAME</th>
-                                                <th>Code</th>
+                                                <th style="width: 30%">Course Code</th>
+                                                <th style="width: 30%">Taught By</th>
                                                 <th>Created at</th>
                                                 <th>Action</th>
                                             </tr>
@@ -72,7 +73,14 @@
                                                         </div>
                                                     </td>
                                                     <td>{{ $course->name }}</td>
-                                                    <td>{{ $course->code }}</td>
+                                                    <td>{{ $course->course_code }}</td>
+                                                    <td>
+                                                        <ul>
+                                                            @foreach ($course->professors as $professor)
+                                                            <li>{{ $professor->name }}</li>
+                                                            @endforeach
+                                                            </ul>
+                                                    </td>
                                                     <td>{{ $course->created_at }}</td>
                                                     <td>
                                                         <a class="btn btn-info btn-sm"

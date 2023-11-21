@@ -19,6 +19,7 @@
 
 <!-- Theme style -->
 <link rel="stylesheet" href="{{ asset('backend/dist/css/adminlte.min.css') }}">
+<link rel="stylesheet" href="{{ asset('backend/plugins/select2/css/select2.min.css') }}">
 
 <link rel="icon" type="image/png" sizes="16x16"
     href="@isset($setting['favicon']){{ asset('uploads/' . $setting['favicon']) }}@endisset">
