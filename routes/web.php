@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ProfessorController;
 use App\Http\Controllers\Admin\TimeSlotController;
 use App\Http\Controllers\Admin\ClassController;
+use App\Http\Controllers\Admin\TimetableController;
 
 
 /*
@@ -95,6 +96,13 @@ Route::group([
     Route::post('get-class', [ClassController::class, 'timeSlotDetail'])->name('admin.getClass');
     Route::get('class/delete/{id}',  [ClassController::class, 'destroy'])->name('class-delete');
     Route::post('delete-selected-classes',  [ClassController::class, 'DeleteSelectedClasses'])->name('delete-selected-classes');
+
+     //Timetable Controller
+     Route::resource('timetables', TimetableController::class);
+     Route::post('get-timetables',  [TimetableController::class, 'getTimetable'])->name('admin.getTimetables');
+     Route::post('get-timetable', [TimetableController::class, 'timetableDetail'])->name('admin.getTimetable');
+     Route::get('timetables/delete/{id}',  [TimetableController::class, 'destroy'])->name('timetable-delete');
+     Route::post('delete-selected-timetables',  [TimetableController::class, 'DeleteSelectedTimeTables'])->name('delete-selected-timetables');
 
     //Roles Controller
     Route::resource('roles', RoleController::class);

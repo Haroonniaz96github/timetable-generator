@@ -67,7 +67,7 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3>{{$roomsCount ?? ''}}</h3>
 
                 <p>Lecturer Rooms</p>
               </div>
@@ -82,7 +82,7 @@
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
+                <h3>{{$coursesCount ?? ''}}</h3>
 
                 <p>Courses</p>
               </div>
@@ -97,7 +97,7 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3>{{$professorsCount  ?? ''}}</h3>
 
                 <p>Professors</p>
               </div>
@@ -112,7 +112,7 @@
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">
-                <h3>65</h3>
+                <h3>{{$classesCount ?? ''}}</h3>
 
                 <p>Classes</p>
               </div>

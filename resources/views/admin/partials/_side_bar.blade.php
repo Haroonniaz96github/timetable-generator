@@ -49,6 +49,15 @@
                       </a>
                   </li>
                   <li class="nav-item">
+                    <a href="{{ route('timetables.index') }}"
+                        class="nav-link {{ request()->is('admin/timetables') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Generate Timetable
+                        </p>
+                    </a>
+                </li>
+                  <li class="nav-item">
                       <a href="#" class="nav-link">
                           <i class="nav-icon fas fa-user-alt"></i>
                           <p>
