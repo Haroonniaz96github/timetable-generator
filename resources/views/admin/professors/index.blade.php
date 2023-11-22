@@ -90,7 +90,7 @@
                                                         @if (count($professor->unavailable_timeslots))
                                                             <ul>
                                                                 @foreach ($professor->unavailable_timeslots as $period)
-                                                                    <li>{{ $period->day->name . " " . }}</li>
+                                                                    <li>{{ $period->day->name}}</li>
                                                                 @endforeach
                                                             </ul>
                                                         @else
