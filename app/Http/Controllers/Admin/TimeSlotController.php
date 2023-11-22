@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\TimeSlot;
+use App\Models\Timeslot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Events\TimeslotsUpdated;
@@ -15,7 +15,7 @@ class TimeSlotController extends Controller
 
     private $obj;
 
-    public function __construct(TimeSlot $object)
+    public function __construct(Timeslot $object)
     {
         // $this->middleware('auth:admin');
         $this->obj = $object;
@@ -83,7 +83,7 @@ class TimeSlotController extends Controller
         }
 
         $input = $request->all();
-        $time_slot = new TimeSlot();
+        $time_slot = new Timeslot();
         $time_slot->time =  $data['time'];
 
         if ($time_slot->save()) {
@@ -164,7 +164,7 @@ class TimeSlotController extends Controller
 
     public function timeSlotDetail(Request $request)
     {
-        $time_slot = TimeSlot::findOrFail($request->input('id'));
+        $time_slot = Timeslot::findOrFail($request->input('id'));
 
         return view('admin.time_slots.single', ['title' => 'Professor Detail', 'time_slot' => $time_slot]);
     }
