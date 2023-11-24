@@ -51,6 +51,7 @@ class Test extends Command
         if ($timetable) {
             $timetableGA = new TimetableGA($timetable);
             $timetableGA->run();
+            Log::info('Timetable Generated');
         } else {
             Log::info('No timetable with status "IN PROGRESS" found.');
         }
