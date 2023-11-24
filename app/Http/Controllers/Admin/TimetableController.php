@@ -161,7 +161,7 @@ class TimetableController extends Controller
             $path = $timetable->file_url;
             $timetableData =  Storage::get($path);
             $timetableName = $timetable->name;
-            return view('timetable.view', compact('timetableData', 'timetableName'));
+            return view('admin.timetable.view', compact('timetableData', 'timetableName'));
         }
     }
 
