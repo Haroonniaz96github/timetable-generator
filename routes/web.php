@@ -103,6 +103,7 @@ Route::group([
      Route::post('get-timetable', [TimetableController::class, 'timetableDetail'])->name('admin.getTimetable');
      Route::get('timetables/delete/{id}',  [TimetableController::class, 'destroy'])->name('timetable-delete');
      Route::post('delete-selected-timetables',  [TimetableController::class, 'DeleteSelectedTimeTables'])->name('delete-selected-timetables');
+     Route::get('timetables/view/{id}', [TimetableController::class, 'view'])->name('timetables.view');
 
     //Roles Controller
     Route::resource('roles', RoleController::class);
