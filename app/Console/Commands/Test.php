@@ -47,8 +47,13 @@ class Test extends Command
     {
         Log::info('Generating timetable');
         $timetable = Timetable::where('status', 'IN PROGRESS')->latest()->first();
-        $timetableGA = new TimetableGA($timetable);
-        $timetableGA->run();
+
+        if ($timetable) {
+            $timetableGA = new TimetableGA($timetable);
+            $timetableGA->run();
+        } else {
+            Log::info('No timetable with status "IN PROGRESS" found.');
+        }
         //dispatch(new GenerateTimetable());
     }
 }
