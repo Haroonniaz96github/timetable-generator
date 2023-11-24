@@ -46,7 +46,7 @@ class Test extends Command
     public function handle()
     {
         Log::info('Generating timetable');
-        $timetable = Timetable::find(3);
+        $timetable = Timetable::where('status', 'IN PROGRESS')->latest()->first();
         $timetableGA = new TimetableGA($timetable);
         $timetableGA->run();
         //dispatch(new GenerateTimetable());
