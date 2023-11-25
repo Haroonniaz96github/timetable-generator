@@ -92,12 +92,14 @@ class TimetableRenderer
             $title = $class->name;
             $content .= str_replace(['{TITLE}', '{HEADING}', '{BODY}'], [$title, $header, $body], $tableTemplate);
         }
-
+        $this->timetable->update([
+            'content' => $content
+        ]);
         $path = 'public/timetables/timetable_' . $this->timetable->id . '.html';
         Storage::put($path, $content);
 
         $this->timetable->update([
-            'file_url' => $path
+            'file_url' => $path,
         ]);
     }
 
