@@ -171,7 +171,7 @@ class TimetableGA
                 && !$algorithm->isGenerationsMaxedOut($generation, $maxGenerations)
             ) {
                 $fittest = $population->getFittest(0);
-                Log::info('evaluatePopulation');
+                Log::info('getFittest');
 
                 print "Generation: " . $generation . "(" . $fittest->getFitness() . ") - ";
                 print $fittest;
