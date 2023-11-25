@@ -89,13 +89,11 @@ class TimetableRenderer
                 }
                 $body .= "</tr>";
             }
-            Log::info('Inner Foreach Loop');
 
 
             $title = $class->name;
             $content .= str_replace(['{TITLE}', '{HEADING}', '{BODY}'], [$title, $header, $body], $tableTemplate);
         }
-        Log::info('Content Foreach Loop Completed');
 
         $this->timetable->update([
             'content' => $content

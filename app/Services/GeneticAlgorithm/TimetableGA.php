@@ -154,10 +154,12 @@ class TimetableGA
             $maxGenerations = 5000;
 
             $timetable = $this->initializeTimetable();
-
+            Log::info('GeneticAlgorithm');
             $algorithm = new GeneticAlgorithm(100, 0.01, 0.9, 2, 10);
+            Log::info('initPopulation');
 
             $population = $algorithm->initPopulation($timetable);
+            Log::info('evaluatePopulation');
 
             $algorithm->evaluatePopulation($population, $timetable);
 
@@ -169,6 +171,7 @@ class TimetableGA
                 && !$algorithm->isGenerationsMaxedOut($generation, $maxGenerations)
             ) {
                 $fittest = $population->getFittest(0);
+                Log::info('getFittest');
 
                 print "Generation: " . $generation . "(" . $fittest->getFitness() . ") - ";
                 print $fittest;
@@ -194,6 +197,7 @@ class TimetableGA
             $scheme = $timetable->getScheme();
             $timetable->createClasses($solution);
             $classes = $timetable->getClasses();
+            Log::info('COMPLETED');
 
             // Update the timetable data in the DB
             $this->timetable->update([
@@ -223,6 +227,7 @@ class TimetableGA
                     'room_id' => $roomId
                 ]);
             }
+            Log::info('TimetablesGenerated');
 
             event(new TimetablesGenerated($this->timetable));
         } catch (\Throwable $th) {
