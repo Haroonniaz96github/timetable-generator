@@ -21,6 +21,7 @@ class TimetableRenderer
      */
     public function __construct($timetable)
     {
+        Log::info('TimetableRenderer');
         $this->timetable = $timetable;
     }
 

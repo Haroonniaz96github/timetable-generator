@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\Services\GeneticAlgorithm\TimetableRenderer;
+use Illuminate\Support\Facades\Log;
 
 class RenderTimetables implements ShouldQueue
 {
@@ -22,6 +23,7 @@ class RenderTimetables implements ShouldQueue
      */
     public function __construct($timetable)
     {
+        Log::info('RenderTimetables');
         $this->timetable = $timetable;
     }
 
