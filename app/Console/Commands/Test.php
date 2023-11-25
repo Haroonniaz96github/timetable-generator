@@ -47,6 +47,7 @@ class Test extends Command
     {
         Log::info('Generating timetable');
         $timetable = Timetable::where('status', 'IN PROGRESS')->latest()->first();
+        Log::info('Generating timetable', ['timetable' => $timetable->toArray()]);
 
         if ($timetable) {
             Log::info('Timetable exists');
