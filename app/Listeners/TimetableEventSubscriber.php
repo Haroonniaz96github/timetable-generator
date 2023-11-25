@@ -7,6 +7,7 @@ use App\Jobs\NotifyProfessors;
 use App\Jobs\RenderTimetables;
 use App\Jobs\GenerateTimetables;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 
 class TimetableEventSubscriber implements ShouldQueue
@@ -23,6 +24,7 @@ class TimetableEventSubscriber implements ShouldQueue
 
     public function onTimetablesGenerated($event)
     {
+        Log::info('onTimetablesGenerated');
         dispatch(new RenderTimetables($event->timetable));
         dispatch(new NotifyProfessors($event->timetable));
     }
