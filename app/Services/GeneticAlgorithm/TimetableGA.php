@@ -191,6 +191,7 @@ class TimetableGA
 
                 // Cool temperature of GA for simulated annealing
                 $algorithm->coolTemperature();
+                Log::info($generation);
             }
             Log::info($generation);
 
