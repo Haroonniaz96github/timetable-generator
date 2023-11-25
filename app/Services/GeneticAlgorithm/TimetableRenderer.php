@@ -10,6 +10,7 @@ use App\Models\Course as CourseModel;
 use App\Models\Timeslot as TimeslotModel;
 use App\Models\CollegeClass as CollegeClassModel;
 use App\Models\Professor as ProfessorModel;
+use Illuminate\Support\Facades\Log;
 
 class TimetableRenderer
 {
@@ -88,13 +89,19 @@ class TimetableRenderer
                 }
                 $body .= "</tr>";
             }
+            Log::info('Inner Foreach Loop');
+
 
             $title = $class->name;
             $content .= str_replace(['{TITLE}', '{HEADING}', '{BODY}'], [$title, $header, $body], $tableTemplate);
         }
+        Log::info('Content Foreach Loop Completed');
+
         $this->timetable->update([
             'content' => $content
         ]);
+        Log::info('Content Updated in dtabase');
+
         $path = 'public/timetables/timetable_' . $this->timetable->id . '.html';
         Storage::put($path, $content);
 
