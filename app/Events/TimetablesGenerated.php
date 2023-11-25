@@ -28,6 +28,7 @@ class TimetablesGenerated
      */
     public function __construct($timetable)
     {
+        Log::info('Timetable event constructor');
         $this->timetable = $timetable;
     }
 
