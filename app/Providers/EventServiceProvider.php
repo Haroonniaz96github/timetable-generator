@@ -15,9 +15,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        'App\Events\Event' => [
+            'App\Listeners\EventListener',
         ],
+    ];
+
+    protected $subscribe = [
+        'App\Listeners\TimetableEventSubscriber',
+        'App\Listeners\TimeslotEventSubscriber',
+        'App\Listeners\UserEventSubscriber'
     ];
 
     /**
@@ -27,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        parent::boot();
         //
     }
 }
