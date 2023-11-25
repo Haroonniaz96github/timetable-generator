@@ -170,6 +170,7 @@ class TimetableGA
                 !$algorithm->isTerminationConditionMet($population)
                 && !$algorithm->isGenerationsMaxedOut($generation, $maxGenerations)
             ) {
+                Log::info($generation);
                 $fittest = $population->getFittest(0);
                 Log::info('getFittest');
 
@@ -191,7 +192,6 @@ class TimetableGA
 
                 // Cool temperature of GA for simulated annealing
                 $algorithm->coolTemperature();
-                Log::info($generation);
             }
             Log::info($generation);
 
