@@ -193,7 +193,7 @@ class TimetableGA
                 // Cool temperature of GA for simulated annealing
                 $algorithm->coolTemperature();
             }
-            Log::info('after while loop', $generation);
+            Log::info('after while loop  '. $generation);
 
             $solution =  $population->getFittest(0);
             $scheme = $timetable->getScheme();

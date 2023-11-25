@@ -36,7 +36,6 @@ class NotifyProfessors implements ShouldQueue
     public function handle()
     {
         $professorIds = $this->timetable->schedules()->pluck('professor_id');
-        Log::info($professorIds);
 
         $notifiableProfessors = Professor::whereNotNull('email')
             ->where('email', '!=', '')
