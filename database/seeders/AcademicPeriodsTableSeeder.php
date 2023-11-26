@@ -18,6 +18,12 @@ class AcademicPeriodsTableSeeder extends Seeder
             ->insert([
                 ["name" => "Semester I"],
                 ["name" => "Semester II"],
+                ["name" => "Semester III"],
+                ["name" => "Semester IV"],
+                ["name" => "Semester V"],
+                ["name" => "Semester VI"],
+                ["name" => "Semester VII"],
+                ["name" => "Semester VIII"],
             ]);
     }
 }
