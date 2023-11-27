@@ -102,12 +102,6 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a class="btn btn-info btn-sm"
-                                                        onclick="event.preventDefault();viewInfo(
-                                                            {{ $class->id }});"
-                                                        title="View Class" href="javascript:void(0)">
-                                                        <i class="fa fa-eye"></i>
-                                                    </a>
                                                     <a title="Edit Class" class="btn btn-sm btn-primary" href="{{route('classes.edit', $class->id)}}">
                                                     <i class="fa fa-edit"></i>
                                                     </a>

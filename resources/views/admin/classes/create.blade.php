@@ -69,11 +69,41 @@
                                 </div>
                             </div>
                             <div id="courses-container">
-
+                                <div class="row course-form appended-course" style="margin-bottom: 5px">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        {{-- <div class="select2-wrapper"> --}}
+                                            <select class="form-control course-select" name="courses[]">
+                                                <option value="" selected>Select a course</option>
+                                                @foreach ($courses as $course)
+                                                <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        {{-- </div> --}}
+                                    </div>
+                            
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="select2-wrapper">
+                                            <select class="form-control period-select" name="periods[]">
+                                                <option value="" selected>Select an academic period</option>
+                                                @foreach ($academicPeriods as $period)
+                                                <option value="{{ $period->id }}">{{ $period->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="col-md-3 col-sm-4 col-xs-10">
+                                        <input type="number" class="form-control course-meetings" name="meetings[]">
+                                    </div>
+                            
+                                    <div class="col-md-1 col-sm-1 col-xs-2">
+                                        <span class="fa fa-trash course-remove" title="Remove Course"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label>Population</label>
-                                <input type="text" name="size" class="form-control">
+                                <input type="number" name="size" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="code">Unavailable Lecture Rooms</label>
@@ -103,10 +133,10 @@
     </section>
 
     <div id="course-template" class="" style="display: none">
-        <div class="row course-form appended-course" id="course-{ID}-container" style="margin-bottom: 5px">
+        <div class="row course-form appended-course" style="margin-bottom: 5px">
            <div class="col-md-4 col-sm-6 col-xs-12">
                {{-- <div class="select2-wrapper"> --}}
-                   <select class="form-control course-select" name="course-{ID}">
+                   <select class="form-control course-select" name="courses[]">
                        <option value="" selected>Select a course</option>
                        @foreach ($courses as $course)
                        <option value="{{ $course->id }}">{{ $course->name }}</option>
@@ -117,7 +147,7 @@
    
            <div class="col-md-4 col-sm-6 col-xs-12">
                <div class="select2-wrapper">
-                   <select class="form-control period-select" name="period-{ID}">
+                   <select class="form-control period-select" name="periods[]">
                        <option value="" selected>Select an academic period</option>
                        @foreach ($academicPeriods as $period)
                        <option value="{{ $period->id }}">{{ $period->name }}</option>
@@ -127,7 +157,7 @@
            </div>
    
            <div class="col-md-3 col-sm-4 col-xs-10">
-               <input type="number" class="form-control course-meetings" name="course-{ID}-meetings">
+               <input type="number" class="form-control course-meetings" name="meetings[]">
            </div>
    
            <div class="col-md-1 col-sm-1 col-xs-2">
@@ -143,31 +173,20 @@
     });
 
     $(document).on('click', '.course-remove', function(event){
-        var $el = $(event.target);
-        var id = $el.data('id');
-
-        $('#course-' + id + '-container').remove();
+        removeCourse()
     });
 
+    function removeCourse(event) {
+        // Remove the parent course-form when the delete icon is clicked
+        $(event.target).closest('.course-form').remove();
+    }
 
-    function addCourse(data){
-        var template = $('#course-template').html();
-        var id = new Date().valueOf();
-        data = data || null;
-
-        template = template.replace(/{ID}/g, id);
-
-        if (data) {
-            $('#courses-container').prepend(template);
-            $('[name=course-' + id + ']').val(data.course_id).change();
-            $('[name=course-' + id + '-meetings]').val(data.meetings);
-            $('[name=period-' + id + ']').val(data.academic_period_id).change();
-        } else {
-            $('#courses-container').append(template);
-        }
-
-        // $('[name=course-' + id +']').select2();
-        // $('[name=period-' + id + ']').select2();
-    };
+    function addCourse() {
+        // Clone the last course-form and append it to the courses-container
+        var lastCourse = $('.appended-course:last');
+        var newCourse = lastCourse.clone();
+        newCourse.find('select, input').val('');
+        $('#courses-container').append(newCourse);
+    }
 </script>
 @endsection

@@ -48,22 +48,44 @@ class ClassController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate request data
         $this->validate($request, [
             'name' => 'required|unique:classes',
-            'size' => 'required'
+            'size' => 'required',
+            'courses' => 'required|array'
         ]);
-        $input = $request->all();
-        $class = new CollegeClass();
-        $class->name = $input['name'];
-        $class->size = $input['size'];
-        $class->save();
-        
-        $class->unavailable_rooms()->sync($input['room_ids']);
-        $class->courses()->sync($input['courses']);
 
+        // Create a new CollegeClass instance
+        $class = new CollegeClass();
+        $class->name = $request->input('name');
+        $class->size = $request->input('size');
+        $class->save();
+
+        // Sync courses
+        foreach ($request->input('courses') as $key => $course) {
+            // Attach records to the pivot table 'courses_classes'
+            $class->courses()->attach(
+                $course,
+                [
+                    'academic_period_id' => $request->input('periods')[$key],
+                    'meetings' => $request->input('meetings')[$key],
+                ]
+            );
+        }
+
+        // Check if 'room_ids' is provided before syncing
+        if ($request->has('room_ids')) {
+            $class->unavailable_rooms()->sync($request->input('room_ids'));
+        }
+
+        // Flash success message
         Session::flash('success_message', 'Great! Class has been added successfully!');
+
+        // Redirect back
         return redirect()->back();
     }
+
+
 
     /**
      * Display the specified resource.
@@ -84,7 +106,13 @@ class ClassController extends Controller
      */
     public function edit($id)
     {
-        //
+        $class = CollegeClass::with('courses')->findOrFail($id);
+        // dd( );
+        $rooms = Room::all();
+        $courses = Course::all();
+        $academicPeriods = AcademicPeriod::all();
+    
+        return view('admin.classes.edit', compact('class', 'rooms', 'courses', 'academicPeriods'));
     }
 
     /**
@@ -96,7 +124,41 @@ class ClassController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Validate request data
+        $this->validate($request, [
+            'name' => 'required|unique:classes,name,' . $id,
+            'size' => 'required',
+            'courses' => 'required|array'
+        ]);
+
+        // Find the class by ID
+        $class = CollegeClass::findOrFail($id);
+
+        // Update class information
+        $class->name = $request->input('name');
+        $class->size = $request->input('size');
+        $class->save();
+
+        // Sync courses
+        $coursesData = [];
+        foreach ($request->input('courses') as $key => $course) {
+            $coursesData[$course] = [
+                'academic_period_id' => $request->input('periods')[$key],
+                'meetings' => $request->input('meetings')[$key],
+            ];
+        }
+        $class->courses()->sync($coursesData);
+
+        // Check if 'room_ids' is provided before syncing
+        if ($request->has('room_ids')) {
+            $class->unavailable_rooms()->sync($request->input('room_ids'));
+        }
+
+        // Flash success message
+        Session::flash('success_message', 'Class has been updated successfully!');
+
+        // Redirect back
+        return redirect()->back();
     }
 
     /**
