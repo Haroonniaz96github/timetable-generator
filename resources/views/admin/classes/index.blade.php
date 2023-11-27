@@ -175,7 +175,7 @@
                 .then((result) => {
                     if (result.value) {
                         var APP_URL = {!! json_encode(url('/')) !!}
-                        window.location.href = APP_URL + "/admin/classes/delete/" + id;
+                        window.location.href = APP_URL + "/admin/class/delete/" + id;
                     }
                 });
         }
