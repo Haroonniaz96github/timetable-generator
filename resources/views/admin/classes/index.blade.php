@@ -166,7 +166,7 @@
             swal.fire({
 
                     title: "Are you sure!",
-                    text: "This course will be deleted permanently",
+                    text: "This class will be deleted permanently",
                     type: "warning",
                     confirmButtonClass: "btn-danger",
                     confirmButtonText: "Yes, delete it!",
@@ -175,7 +175,7 @@
                 .then((result) => {
                     if (result.value) {
                         var APP_URL = {!! json_encode(url('/')) !!}
-                        window.location.href = APP_URL + "/admin/courses/delete/" + id;
+                        window.location.href = APP_URL + "/admin/classes/delete/" + id;
                     }
                 });
         }

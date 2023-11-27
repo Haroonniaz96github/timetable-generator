@@ -8,6 +8,7 @@ use App\Models\Room;
 use App\Models\Course;
 use App\Models\CollegeClass;
 use App\Models\AcademicPeriod;
+use Illuminate\Support\Facades\Session;
 
 class ClassController extends Controller
 {
@@ -106,6 +107,27 @@ class ClassController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $class = CollegeClass::findOrFail($id);
+        $class->delete();
+        Session::flash('success_message', 'Class successfully deleted!');
+        return redirect()->route('classes.index');
+    }
+
+    public function DeleteSelectedClasses(Request $request)
+    {
+        $input = $request->all();
+        $this->validate($request, [
+            'classes' => 'required',
+
+        ]);
+        foreach ($input['classes'] as $index => $id) {
+
+            $course = CollegeClass::findOrFail($id);
+            $course->delete();
+
+        }
+        Session::flash('success_message', 'Classes successfully deleted!');
+        return redirect()->back();
+
     }
 }
