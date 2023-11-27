@@ -102,7 +102,7 @@ class TimetableController extends Controller
             $timetable->days()->sync($dayIds);
         }
         set_time_limit(3000);
-        // event(new TimetablesRequested($timetable));
+        event(new TimetablesRequested($timetable));
         Session::flash('success_message', 'Timetables are being generated.Check back later!');
         return redirect(route('timetables.index'));
     }
