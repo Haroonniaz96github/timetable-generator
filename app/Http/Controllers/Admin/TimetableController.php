@@ -102,7 +102,7 @@ class TimetableController extends Controller
             $timetable->days()->sync($dayIds);
         }
         set_time_limit(3000);
-        event(new TimetablesRequested($timetable));
+        // event(new TimetablesRequested($timetable));
         Session::flash('success_message', 'Timetables are being generated.Check back later!');
         return redirect(route('timetables.index'));
     }
@@ -148,7 +148,28 @@ class TimetableController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $class = Timetable::findOrFail($id);
+        $class->delete();
+        Session::flash('success_message', 'Timetable successfully deleted!');
+        return redirect()->route('timetables.index');
+    }
+
+    public function DeleteSelectedTimeTables(Request $request)
+    {
+        $input = $request->all();
+        $this->validate($request, [
+            'timetables' => 'required',
+
+        ]);
+        foreach ($input['timetables'] as $index => $id) {
+
+            $course = Timetable::findOrFail($id);
+            $course->delete();
+
+        }
+        Session::flash('success_message', 'Timetable successfully deleted!');
+        return redirect()->back();
+
     }
 
     public function view($id)

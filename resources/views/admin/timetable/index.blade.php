@@ -45,7 +45,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="table-responsive">
-                                <form action="{{ url('admin/delete-selected-timetable') }}" method="post" id="delete-form">
+                                <form action="{{ url('admin/delete-selected-timetables') }}" method="post" id="delete-form">
                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                     <table id="datatable" class="table table-bordered table-striped">
                                         <thead>
@@ -66,7 +66,7 @@
                                                     <td>
                                                         <div class="checkbox checkbox-success m-0">
                                                             <input id="checkbox{{ $timetable->id }}" type="checkbox"
-                                                                name="time_slots[]" value="{{ $timetable->id }}">
+                                                                name="timetables[]" value="{{ $timetable->id }}">
                                                             <label for="checkbox{{ $timetable->id }}"></label>
                                                         </div>
                                                     </td>
@@ -138,7 +138,7 @@
                 .then((result) => {
                     if (result.value) {
                         var APP_URL = {!! json_encode(url('/')) !!}
-                        window.location.href = APP_URL + "/admin/time-slots/delete/" + id;
+                        window.location.href = APP_URL + "/admin/timetables/delete/" + id;
                     }
                 });
         }
@@ -146,7 +146,7 @@
         function del_selected() {
             swal.fire({
                     title: "Are you sure?",
-                    text: "These period/periods will be deleted permanently",
+                    text: "These timetable/timetables will be deleted permanently",
                     type: "warning",
                     showCancelButton: true,
                     closeOnConfirm: false,
@@ -156,7 +156,7 @@
                     if (result.value) {
                         $("#delete-form").submit();
                         setTimeout(function() {
-                            swal("Periods deleted sucessfully. Thanks");
+                            swal("Timetables deleted sucessfully. Thanks");
                         }, 2000);
                     }
                 });
